@@ -43,7 +43,7 @@ module FlotHelper
     if func_options.present?
       js += "jQuery.extend(true, flot_options_#{container_id}, #{flot_func_encode(func_options)});"
     end
-    js += "jQuery.plot(jQuery('##{container_id}'), #{flot_encode(data).to_json}, flot_options_#{container_id})"
+    js += "jQuery.plot(jQuery('##{container_id}'), #{flot_encode_val(data).to_json}, flot_options_#{container_id})"
     javascript_tag(js)
   end
 
