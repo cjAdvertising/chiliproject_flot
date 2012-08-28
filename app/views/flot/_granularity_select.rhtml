@@ -1,0 +1,15 @@
+<% fields_for name, range, {} do |f| %>
+  <% if granularities.length > 1 %>
+
+    <div id="<%= name %>_granularity" style="display: inline-block;">
+      <% granularities.each do |g| %>
+        <%= f.radio_button :granularity, g %>
+        <%= f.label "granularity_#{g}".to_sym, g.to_s.titleize %>
+      <% end %>
+      <%= javascript_tag("jQuery('##{name}_granularity').buttonset();") %>
+    </div>
+
+  <% elsif granularities.length == 1 %>
+    <%= f.hidden :granularity, granularities.first %>
+  <% end %>
+<% end %>

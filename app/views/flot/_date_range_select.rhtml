@@ -1,0 +1,66 @@
+<% fields_for name, range, {} do |f| %>
+  <div style="position: relative; display: inline-block;">
+
+    <%# Date range display/button %>
+    <div>
+      <button id="<%= name %>_button">
+        <%= range.start_date.strftime('%b %e, %Y') %> - 
+        <%= range.end_date.strftime('%b %e, %Y') %>
+        <% if range.compare == '1' %> /
+          <%= range.compare_start_date.strftime('%b %e, %Y') %> - 
+          <%= range.compare_end_date.strftime('%b %e, %Y') %>
+        <% end %>
+      </button>
+      <button>Change date range</button>
+    </div>
+
+    <%# Date selection dropdown %>
+    <div style="position: absolute; top: 27px; right: 3px; display: none; z-index: 100; padding: 5px;" class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-bottom">
+      <p>
+        <%= f.select :preset, (presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
+        <%= observe_field "#{name}_preset", :frequency => 0.25, :function => "jQuery('##{name}_date_inputs').toggle(jQuery(element).val() == 'custom');" %>
+      </p>
+
+      <p id="<%= name %>_date_inputs" <% if range.preset.to_sym != :custom %>style="display: none;"<% end %>>
+        <%= f.text_field :start_date %>
+        <%= flot_calendar_for "#{name}_start_date" %>
+
+        <%= f.text_field :end_date %>
+        <%= flot_calendar_for "#{name}_end_date" %>
+      </p>
+
+      <% if comparable %>
+        <p>
+          <%= f.check_box :compare %>
+          <%= f.label :compare, "Compare to past" %>
+        </p>
+        <%= observe_field "#{name}_compare", :function => "jQuery('##{name}_compare_fields').toggle(jQuery(element).attr('checked') == 'checked')" %>
+
+        <div id="<%= name %>_compare_fields" <% if range.compare != '1' %>style="display: none;"<% end %>>
+          <p>
+            <%= f.select :compare_preset, (compare_presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
+            <%= observe_field "#{name}_compare_preset", :frequency => 0.25, :function => "jQuery('##{name}_compare_date_inputs').toggle(jQuery(element).val() == 'custom')" %>
+          </p>
+
+          <p id="<%= name %>_compare_date_inputs" <% if range.compare_preset.to_sym != :custom %>style="display: none;"<% end %>>
+            <%= f.text_field :compare_start_date %>
+            <%= flot_calendar_for "#{name}_compare_start_date" %>
+
+            <%= f.text_field :compare_end_date %>
+            <%= flot_calendar_for "#{name}_compare_end_date" %>
+          </p>
+        </div>
+      <% end %>
+
+      <hr>
+      <%= f.submit %>
+      <%= javascript_tag "jQuery('##{name}_submit').button();" %>
+    </div>
+
+    <%# Enable buttonset %>
+    <%= javascript_tag "jQuery('##{name}_button').button().next()
+      .button({text: false, icons: {primary: 'ui-icon-triangle-1-s'}}).parent()
+      .buttonset().children()
+      .click(function(e) { console.log(this); e.preventDefault(); jQuery(this).parent().next().toggle(); });" %>
+  </div>
+<% end %>
