@@ -4,11 +4,11 @@
     <%# Date range display/button %>
     <div>
       <button id="<%= name %>_button">
-        <%= range.start_date.strftime('%b %e, %Y') %> - 
-        <%= range.end_date.strftime('%b %e, %Y') %>
+        <%= range.start_date.strftime(date_format) %> - 
+        <%= range.end_date.strftime(date_format) %>
         <% if range.compare == '1' %> /
-          <%= range.compare_start_date.strftime('%b %e, %Y') %> - 
-          <%= range.compare_end_date.strftime('%b %e, %Y') %>
+          <%= range.compare_start_date.strftime(date_format) %> - 
+          <%= range.compare_end_date.strftime(date_format) %>
         <% end %>
       </button>
       <button>Change date range</button>

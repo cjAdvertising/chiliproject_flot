@@ -43,7 +43,8 @@ module FlotHelper
     if func_options.present?
       js += "jQuery.extend(true, flot_options_#{container_id}, #{flot_func_encode(func_options)});"
     end
-    js += "jQuery.plot(jQuery('##{container_id}'), #{flot_encode_val(data).to_json}, flot_options_#{container_id})"
+    encoded = data.first.is_a?(Array) ? flot_encode_val(data) : flot_encode(data)
+    js += "jQuery.plot(jQuery('##{container_id}'), #{encoded.to_json}, flot_options_#{container_id})"
     javascript_tag(js)
   end
 
@@ -67,7 +68,8 @@ module FlotHelper
       :granularities => [:month, :week, :day, :hour],
       :presets => range.presets,
       :comparable => true,
-      :compare_presets => range.compare_presets
+      :compare_presets => range.compare_presets,
+      :date_format => (Setting.date_format.present? && Setting.date_format || '%b %e, %Y')
     }.merge(options)
   end
 
