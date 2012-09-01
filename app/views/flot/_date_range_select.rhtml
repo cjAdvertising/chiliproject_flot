@@ -6,7 +6,7 @@
       <button id="<%= name %>_button">
         <%= range.start_date.strftime(date_format) %> - 
         <%= range.end_date.strftime(date_format) %>
-        <% if range.compare == '1' %> /
+        <% if comparable && range.compare == '1' %> /
           <%= range.compare_start_date.strftime(date_format) %> - 
           <%= range.compare_end_date.strftime(date_format) %>
         <% end %>
@@ -17,7 +17,7 @@
     <%# Date selection dropdown %>
     <div style="position: absolute; top: 27px; right: 3px; display: none; z-index: 100; padding: 5px;" class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-bottom">
       <p>
-        <%= f.select :preset, (presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
+        <%= f.select :preset, (range.presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
         <%= observe_field "#{name}_preset", :frequency => 0.25, :function => "jQuery('##{name}_date_inputs').toggle(jQuery(element).val() == 'custom');" %>
       </p>
 
@@ -38,7 +38,7 @@
 
         <div id="<%= name %>_compare_fields" <% if range.compare != '1' %>style="display: none;"<% end %>>
           <p>
-            <%= f.select :compare_preset, (compare_presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
+            <%= f.select :compare_preset, (range.compare_presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
             <%= observe_field "#{name}_compare_preset", :frequency => 0.25, :function => "jQuery('##{name}_compare_date_inputs').toggle(jQuery(element).val() == 'custom')" %>
           </p>
 

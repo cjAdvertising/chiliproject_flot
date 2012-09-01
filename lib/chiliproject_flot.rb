@@ -9,10 +9,12 @@ module ChiliprojectFlot
 
   @@registered = {:presets => {}, :compare_presets => {}}
 
-  # Public: Register an flot date range preset.
+  # Public: Register a Flot date range preset.
   #
-  # provider - Symbol name of the OmniAuth strategy.
-  # args     - Array provider arguments.
+  # section - Symbol or String section name (:presets or :compare_presets).
+  # name    - Symbol or String preset name.
+  # options - Hash options for the preset.
+  # block   - Block date generator for preset.
   #
   # Returns nothing.
   def self.register(section, name, options={}, &block)
