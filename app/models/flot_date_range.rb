@@ -71,7 +71,10 @@ class FlotDateRange < Hashie::Mash
   # Returns nothing.
   def parse_dates
     dates = %w{start_date end_date compare_start_date compare_end_date}
-    dates.each { |d| self[d] = Date.parse self[d].to_s if self[d].is_a?(String) }
+    dates.each do |d| 
+      ds = self[d]
+      self[d] = Date.parse(ds) if ds.present? && ds.is_a?(String)
+    end
   end
 
   # Internal: Sets start and end dates from presets if given.
@@ -79,7 +82,7 @@ class FlotDateRange < Hashie::Mash
   # Returns nothing.
   # Raises RuntimeError if preset is invalid.
   def preset_dates
-    ['', 'compare_'].each do |prefix|
+    (compare == '1' ? ['', 'compare_'] : ['']).each do |prefix|
 
       p = "#{prefix}preset"
       ps = "#{p}s".to_sym

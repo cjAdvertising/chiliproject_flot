@@ -42,7 +42,7 @@
             <%= observe_field "#{name}_compare_preset", :frequency => 0.25, :function => "jQuery('##{name}_compare_date_inputs').toggle(jQuery(element).val() == 'custom')" %>
           </p>
 
-          <p id="<%= name %>_compare_date_inputs" <% if range.compare_preset.to_sym != :custom %>style="display: none;"<% end %>>
+          <p id="<%= name %>_compare_date_inputs" <% unless range.compare == '1' && range.compare_preset.to_sym == :custom %>style="display: none;"<% end %>>
             <%= f.text_field :compare_start_date %>
             <%= flot_calendar_for "#{name}_compare_start_date" %>
 
