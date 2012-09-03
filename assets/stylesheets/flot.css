@@ -1,3 +1,43 @@
+/* Fix jQuery UI selectmenu ugliness. */
+a.ui-selectmenu, 
+.ui-selectmenu a, 
+.ui-selectmenu-menu li a { 
+  font-weight: normal; 
+  color: #333; 
+  text-decoration: none;
+}
+
+.flot-date-range {
+  position: relative;
+  display: inline-block;
+}
+
+.flot-date-range-dropdown {
+  position: absolute; 
+  top: 27px; 
+  right: 3px; 
+  display: none; 
+  z-index: 100; 
+  padding: 5px;
+}
+
+.flot-date-range-dropdown p {
+  padding: 5px;
+}
+
+/* Ensure selects are of reasonable size for jQuery UI selectmenu plugin. */
+.flot-timeline select {
+  min-width: 200px;
+}
+
+.flot-timeline-date-range {
+  float: right;
+}
+
+.flot-timeline-flot {
+  height: 300px; 
+  clear: both;
+}
 
 #flot-tooltip {
   box-shadow: 2px 2px 8px 0px rgba(150,150,150,0.5);

@@ -1,0 +1,22 @@
+<div id="<%= name %>_timeline_container">
+  <div class="flot-timeline-date-range">
+    <%= flot_date_range_for name, range, local_assigns %>
+  </div>
+
+  <h2><%= yield :flot_timeline_title %></h2>
+
+  <div class="flot-timeline box">
+    <div style="float: left;">
+      <%= yield :flot_timeline_toolbar %>
+    </div>
+
+    <div style="float: right;">
+      <%= flot_granularity_select_for name, range, local_assigns %>
+    </div>
+
+    <div id="<%= name %>_timeline_flot" class="flot-timeline-flot"></div>
+
+    <%= flot_for "#{name}_timeline_flot", data, flot_options %>
+  </div>
+</div>
+<%= javascript_tag "jQuery('##{name}_timeline_container select').hide().peek('selectmenu', {style: 'popup'});" %>

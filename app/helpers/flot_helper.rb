@@ -30,6 +30,7 @@ module FlotHelper
   #
   # Returns nothing.
   def flot_granularity_select_for(name, range=nil, options={})
+    include_flot_header_tags
     render :partial => 'flot/granularity_select', :locals => {
       :name => name,
       :range => range,
@@ -48,12 +49,68 @@ module FlotHelper
   #
   # Returns nothing.
   def flot_date_range_for(name, range=nil, options={})
+    include_flot_header_tags
     render :partial => 'flot/date_range_select', :locals => {
       :name => name,
       :range => range,
       :comparable => true,
       :date_format => (Setting.date_format.present? && Setting.date_format || '%b %e, %Y')
     }.merge(options)
+  end
+
+  def flot_timeline_for(name, range=nil, options={})
+    include_flot_header_tags
+
+    default_flot_options = {
+      :xaxis => {:mode => 'time', :timezone => 'browser'}, 
+      :series => {:lines => {:show => true}, :points => {:show => true}},
+      :grid => {:hoverable => true, :autoHighlight => false},
+      :crosshair => {:mode => 'x', :color => 'rgba(66, 66, 66, 0.20)'},
+      :multitip => {
+        :show => true,
+        :tipper => %@function(plot, highlighted) {
+          var $ = jQuery, tips = [], series = plot.getData(), granularity = $('input:radio[name="#{name}[granularity]"]:checked').val(), last = null;
+          $.each(highlighted, function(i, h) {
+            var d = new Date(h[1][0]), y = h[1][1], tip = '', df;
+            switch(granularity) {
+              case 'hour': df = 'ddd, MMM d, yyyy, H:mm - ' + d.clone().addHours(1).toString('H:mm'); break;
+              case 'day': df = 'ddd, MMM d, yyyy'; break;
+              case 'week': df = 'MMM d, yyyy'; break; // + d.clone().addDays(6).toString('MMM d, yyyy'); break;
+              case 'month': df = 'MMM yyyy'; break;
+            }
+            ds = d.toString(df);
+            if (last != ds) {
+              if (last != null) tip += '<hr>';
+              last = ds;
+              tip += '<strong>' + ds + '</strong><br>';
+            }
+            tip += '<span style="color:' + series[h[0]].color + '">' + series[h[0]].label + '</span>: ' + 
+              series[h[0]].yaxis.options.tickFormatter(y, series[h[0]].yaxis) + '<br>';
+            tips.push(tip);
+          });
+          return tips.join('');
+        }@.to_sym
+      },
+      :yaxis => {
+        :tickFormatter => %@function(val, axis) {
+          switch(axis.options.numberFormat) {
+            case 'percent': return val.toFixed(2) + "%";
+            case 'time':
+              var d = Number(val), h = Math.floor(d / 3600), m = Math.floor(d % 3600 / 60), s = Math.floor(d % 3600 % 60);
+              return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
+          }
+          return val;
+        }@.to_sym
+      }
+    }
+
+    flot_options = default_flot_options.merge(options[:flot_options] || {})
+
+    render :partial => 'flot/timeline', :locals => {
+      :name => name,
+      :range => range,
+      :flot_options => flot_options
+    }.merge(options.reject { |k, v| k == :flot_options})
   end
 
   # Public: Display a calendar date select control. Identical to calendar_for
@@ -78,11 +135,14 @@ module FlotHelper
   def include_flot_header_tags
     return if @flot_included
     plugins = %w{ resize pie stack time crosshair time }.map { |p| "flot/jquery.flot.#{p}.js" }
-    scripts = %w{ flot/jquery.flot.js } + plugins
+    scripts = %w{ flot/jquery.flot.js jquery.flot.multitip.js jquery.flot.drilldown.js jquery.ui.selectmenu.js jquery.peek.js date.js} + plugins
+
     content_for :header_tags do
       scripts.map do |s| 
         javascript_include_tag s, :plugin => :chiliproject_flot
-      end.join + stylesheet_link_tag('flot', :plugin => :chiliproject_flot)
+      end.join + 
+      stylesheet_link_tag('flot', :plugin => :chiliproject_flot) +
+      stylesheet_link_tag('jquery.ui.selectmenu.css', :plugin => :chiliproject_flot)
     end
     @flot_included = true
   end

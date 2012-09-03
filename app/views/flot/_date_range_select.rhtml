@@ -1,5 +1,5 @@
 <% fields_for name, range, {} do |f| %>
-  <div style="position: relative; display: inline-block;">
+  <div class="flot-date-range">
 
     <%# Date range display/button %>
     <div>
@@ -15,7 +15,7 @@
     </div>
 
     <%# Date selection dropdown %>
-    <div style="position: absolute; top: 27px; right: 3px; display: none; z-index: 100; padding: 5px;" class="ui-widget ui-widget-content ui-helper-clearfix ui-corner-bottom">
+    <div class="flot-date-range-dropdown ui-widget ui-widget-content ui-helper-clearfix ui-corner-bottom">
       <p>
         <%= f.select :preset, (range.presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
         <%= observe_field "#{name}_preset", :frequency => 0.25, :function => "jQuery('##{name}_date_inputs').toggle(jQuery(element).val() == 'custom');" %>
