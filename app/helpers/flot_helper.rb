@@ -31,7 +31,7 @@ module FlotHelper
   # Returns nothing.
   def flot_granularity_select_for(name, range=nil, options={})
     include_flot_header_tags
-    render :partial => 'flot/granularity_select', :locals => {
+    render 'flot/granularity_select', {
       :name => name,
       :range => range,
       :granularities => [:month, :week, :day, :hour]
@@ -50,7 +50,7 @@ module FlotHelper
   # Returns nothing.
   def flot_date_range_for(name, range=nil, options={})
     include_flot_header_tags
-    render :partial => 'flot/date_range_select', :locals => {
+    render 'flot/date_range_select', {
       :name => name,
       :range => range,
       :comparable => true,
@@ -106,7 +106,7 @@ module FlotHelper
 
     flot_options = default_flot_options.merge(options[:flot_options] || {})
 
-    render :partial => 'flot/timeline', :locals => {
+    render 'flot/timeline', {
       :name => name,
       :range => range,
       :flot_options => flot_options
@@ -169,6 +169,7 @@ module FlotHelper
   def flot_encode_data_val(val)
     case val
       when Fixnum then val
+      when Float then val
       when String then val.to_f
       when Array  then val.map { |v| flot_encode_data_val(v) }
       when Time   then val.to_i * 1000
