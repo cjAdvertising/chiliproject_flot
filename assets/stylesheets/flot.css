@@ -26,7 +26,7 @@ a.ui-selectmenu,
 }
 
 /* Ensure selects are of reasonable size for jQuery UI selectmenu plugin. */
-.flot-timeline select {
+.flot-timeline-container select {
   min-width: 200px;
 }
 

@@ -61,6 +61,6 @@
     <%= javascript_tag "jQuery('##{name}_button').button().next()
       .button({text: false, icons: {primary: 'ui-icon-triangle-1-s'}}).parent()
       .buttonset().children()
-      .click(function(e) { console.log(this); e.preventDefault(); jQuery(this).parent().next().toggle(); });" %>
+      .click(function(e) { e.preventDefault(); jQuery(this).parent().next().toggle(); });" %>
   </div>
 <% end %>
