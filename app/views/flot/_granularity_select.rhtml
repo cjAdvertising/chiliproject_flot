@@ -10,6 +10,6 @@
     </div>
 
   <% elsif granularities.length == 1 %>
-    <%= f.hidden :granularity, granularities.first %>
+    <%= f.hidden_field :granularity, :value => granularities.first %>
   <% end %>
 <% end %>
