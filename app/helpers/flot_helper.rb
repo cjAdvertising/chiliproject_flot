@@ -69,7 +69,9 @@ module FlotHelper
       :multitip => {
         :show => true,
         :tipper => %@function(plot, highlighted) {
-          var $ = jQuery, tips = [], series = plot.getData(), granularity = $('input:radio[name="#{name}[granularity]"]:checked').val(), last = null;
+          var $ = jQuery, tips = [], series = plot.getData(), 
+            granularity = $('input:radio[name="#{name}[granularity]"]:checked, input:hidden[name="#{name}[granularity]"]').val(), 
+            last = null;
           $.each(highlighted, function(i, h) {
             var d = new Date(h[1][0]), y = h[1][1], tip = '', df;
             switch(granularity) {
