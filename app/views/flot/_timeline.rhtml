@@ -3,14 +3,14 @@
     <%= flot_date_range_for name, range, local_assigns %>
   </div>
 
-  <h2><%= yield :flot_timeline_title %></h2>
+  <%= yield :flot_timeline_title %>
 
   <div class="flot-timeline box">
-    <div style="float: left;">
+    <div class="flot-timeline-toolbar">
       <%= yield :flot_timeline_toolbar %>
     </div>
 
-    <div style="float: right;">
+    <div class="flot-timeline-granularity-container">
       <%= flot_granularity_select_for name, range, local_assigns %>
     </div>
 

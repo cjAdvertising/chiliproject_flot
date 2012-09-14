@@ -34,6 +34,14 @@ a.ui-selectmenu,
   float: right;
 }
 
+.flot-timeline-toolbar {
+  float: left;
+}
+
+.flot-timeline-granularity-container {
+  float: right;
+}
+
 .flot-timeline-flot {
   height: 300px; 
   clear: both;
