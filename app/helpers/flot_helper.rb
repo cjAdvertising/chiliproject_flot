@@ -155,9 +155,10 @@ module FlotHelper
   #
   # Returns String encoded data Array as JSON.
   def flot_encode_data(data)
+    Rails.logger.info "DATA: #{data.inspect}"
     return data.to_json unless data.is_a?(Array) && data.length > 0
     if data.first.is_a? Hash
-      data.map { |d| d.merge :data => flot_encode_data_val(d[:data]) }.to_json
+      data.map { |d| d.merge :data => flot_encode_data_val(d[:data] || d['data']) }.to_json
     elsif
       data.map { |d| flot_encode_data_val(d) }.to_json
     end
