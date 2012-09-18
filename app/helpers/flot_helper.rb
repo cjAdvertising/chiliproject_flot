@@ -144,7 +144,8 @@ module FlotHelper
         javascript_include_tag s, :plugin => :chiliproject_flot
       end.join + 
       stylesheet_link_tag('flot', :plugin => :chiliproject_flot) +
-      stylesheet_link_tag('jquery.ui.selectmenu.css', :plugin => :chiliproject_flot)
+      stylesheet_link_tag('jquery.ui.selectmenu.css', :plugin => :chiliproject_flot) +
+      '<!--[if lte IE 8]>' + javascript_include_tag('flot/excanvas.min.js', :plugin => :chiliproject_flot) + '<![endif]-->'
     end
     @flot_included = true
   end
