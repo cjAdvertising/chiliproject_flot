@@ -136,7 +136,7 @@ module FlotHelper
   # Returns nothing.
   def include_flot_header_tags
     return if @flot_included
-    plugins = %w{ resize pie stack time crosshair time }.map { |p| "flot/jquery.flot.#{p}.js" }
+    plugins = %w{ resize pie stack time crosshair }.map { |p| "flot/jquery.flot.#{p}.js" }
     scripts = %w{ flot/jquery.flot.js jquery.flot.multitip.js jquery.flot.drilldown.js jquery.ui.selectmenu.js jquery.peek.js date.js} + plugins
 
     content_for :header_tags do
