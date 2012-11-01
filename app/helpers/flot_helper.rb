@@ -173,6 +173,8 @@ module FlotHelper
   def flot_encode_data_val(val)
     case val
       when Fixnum then val
+      when Bignum then val
+      when Integer then val
       when Float then val
       when String then val.to_f
       when Array  then val.map { |v| flot_encode_data_val(v) }
