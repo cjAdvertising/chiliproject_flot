@@ -1,6 +1,5 @@
 # Public: Helper functions for Flot graphs.
 module FlotHelper
-  unloadable
 
   # Public: Render a Flot plot in a container.
   #
@@ -116,7 +115,7 @@ module FlotHelper
   end
 
   # Public: Display a calendar date select control. Identical to calendar_for
-  # in the latest Chiliproject with a dateFormat supported by Date.parse.
+  # in the latest Redmine with a dateFormat supported by Date.parse.
   #
   # field_id - String or Symbol id of the text field to receive the date.
   # options  - Hash optional options for the calendar (default: {}):
@@ -126,7 +125,7 @@ module FlotHelper
   # Returns nothing.
   def flot_calendar_for(field_id, options={})
     options = {:dateFormat => 'yy-mm-dd'}.merge options
-    javascript_tag("jQuery('##{field_id}').datepicker(#{options.to_json})")
+    javascript_tag("jQuery('##{field_id}').datepicker(#{options.to_json})").html_safe
   end
 
   private
@@ -140,12 +139,12 @@ module FlotHelper
     scripts = %w{ flot/jquery.flot.js jquery.flot.multitip.js jquery.flot.drilldown.js jquery.ui.selectmenu.js jquery.peek.js date.js} + plugins
 
     content_for :header_tags do
-      scripts.map do |s| 
-        javascript_include_tag s, :plugin => :chiliproject_flot
+      (scripts.map do |s| 
+        javascript_include_tag s, :plugin => :redmine_flot
       end.join + 
-      stylesheet_link_tag('flot', :plugin => :chiliproject_flot) +
-      stylesheet_link_tag('jquery.ui.selectmenu.css', :plugin => :chiliproject_flot) +
-      '<!--[if lte IE 8]>' + javascript_include_tag('flot/excanvas.min.js', :plugin => :chiliproject_flot) + '<![endif]-->'
+      stylesheet_link_tag('flot', :plugin => :redmine_flot) +
+      stylesheet_link_tag('jquery.ui.selectmenu.css', :plugin => :redmine_flot) +
+      '<!--[if lte IE 8]>' + javascript_include_tag('flot/excanvas.min.js', :plugin => :redmine_flot) + '<![endif]-->').html_safe
     end
     @flot_included = true
   end

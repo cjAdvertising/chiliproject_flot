@@ -1,13 +1,9 @@
-require 'hashie'
-require 'chiliproject_flot'
-
 # Public: Date range data model for Flot graphs.
 #
 # Parses String values into Date objects where appropriate, turns all other 
 # String values into Symbols (except compare) and then resets the dates to
 # those determined by a preset if one is given.
 class FlotDateRange < Hashie::Mash
-  unloadable
 
   # Public: Create a date range instance.
   #
@@ -52,7 +48,7 @@ class FlotDateRange < Hashie::Mash
   #
   # Returns Array preset names as Symbols.
   def presets_by_key(preset_key)
-    ChiliprojectFlot.registered[preset_key].select do |n, p|
+    RedmineFlot.registered[preset_key].select do |n, p|
       g = [p[:options][:granularity]].flatten.compact
       !g.present? || g.include?(granularity)
     end.keys
@@ -89,7 +85,7 @@ class FlotDateRange < Hashie::Mash
 
       if self.send(ps).include? self[p]
         # Call preset block and update dates from result.
-        dates = ChiliprojectFlot.registered[ps][self[p]][:block].call self
+        dates = RedmineFlot.registered[ps][self[p]][:block].call self
         self["#{prefix}start_date"], self["#{prefix}end_date"] = dates
       else
         # Ensure start and end dates are set.

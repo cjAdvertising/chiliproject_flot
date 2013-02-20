@@ -1,4 +1,4 @@
-<% fields_for name, range, {} do |f| %>
+<%= fields_for name, range, {} do |f| %>
   <div class="flot-date-range">
 
     <%# Date range display/button %>
@@ -18,7 +18,10 @@
     <div class="flot-date-range-dropdown ui-widget ui-widget-content ui-helper-clearfix ui-corner-bottom">
       <p>
         <%= f.select :preset, (range.presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
-        <%= observe_field "#{name}_preset", :frequency => 0.25, :function => "jQuery('##{name}_date_inputs').toggle(jQuery(element).val() == 'custom');" %>
+
+        <%= javascript_tag do %>
+          $('#<%= name %>_preset').change(function() { $('#<%= name %>_date_inputs').toggle($(this).val() == 'custom'); });
+        <% end %>
       </p>
 
       <p id="<%= name %>_date_inputs" <% if range.preset.to_sym != :custom %>style="display: none;"<% end %>>
@@ -34,12 +37,18 @@
           <%= f.check_box :compare %>
           <%= f.label :compare, "Compare to past" %>
         </p>
-        <%= observe_field "#{name}_compare", :function => "jQuery('##{name}_compare_fields').toggle(jQuery(element).attr('checked') == 'checked')" %>
+
+        <%= javascript_tag do %>
+          $('#<%= name %>_compare').change(function() { $('#<%= name %>_compare_fields').toggle($(this).attr('checked') == 'checked'); });
+        <% end %>
 
         <div id="<%= name %>_compare_fields" <% if range.compare != '1' %>style="display: none;"<% end %>>
           <p>
             <%= f.select :compare_preset, (range.compare_presets.map { |p| [p.to_s.titleize, p] } << ['Custom range', :custom]) %>
-            <%= observe_field "#{name}_compare_preset", :frequency => 0.25, :function => "jQuery('##{name}_compare_date_inputs').toggle(jQuery(element).val() == 'custom')" %>
+
+            <%= javascript_tag do %>
+              $('#<%= name %>_compare_preset').change(function() { $('#<%= name %>_compare_date_inputs').toggle($(this).val() == 'custom'); });
+            <% end %>
           </p>
 
           <p id="<%= name %>_compare_date_inputs" <% unless range.compare == '1' && range.compare_preset.to_sym == :custom %>style="display: none;"<% end %>>

@@ -1,1 +1,1 @@
-# Chiliproject Flot
+# Redmine Flot

@@ -1,13 +1,11 @@
-# encoding: utf-8
+require "active_support/concern"
+require "redmine"
+require "redmine_flot/plugin"
 
-require 'redmine'
-require 'chiliproject_flot/patches/base'
-require 'chiliproject_flot/patches/plugin'
+# Public: Redmine Flot support module.
+module RedmineFlot
 
-# Public: Chiliproject Flot support module.
-module ChiliprojectFlot
-
-  @@registered = {:presets => {}, :compare_presets => {}}
+  @@registered = {presets: {}, compare_presets: {}}
 
   # Public: Register a Flot date range preset.
   #
@@ -18,7 +16,7 @@ module ChiliprojectFlot
   #
   # Returns nothing.
   def self.register(section, name, options={}, &block)
-    @@registered[section.to_sym][name.to_sym] = {:options => options, :block => block}
+    @@registered[section.to_sym][name.to_sym] = {options: options, block: block}
   end
 
   # Public: Fetch all registered presets.
@@ -28,7 +26,5 @@ module ChiliprojectFlot
     @@registered
   end
 
-  # Public: Various patches for Redmine/Chiliproject core.
-  module Patches
-  end
+  Redmine::Plugin.send :include, Plugin
 end
